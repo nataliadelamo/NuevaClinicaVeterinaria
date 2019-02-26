@@ -1,20 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package otro;
 
+import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 /**
  *
- * @author Natalia
+ * @author xavier
  */
 public class Otro {
+
     /**
      * @param args the command line arguments
      */
@@ -42,12 +38,7 @@ public class Otro {
 
         //Tiene toda la pinta de ser un método
         do {
-            System.out.println("¿Qué quieres hacer?");
-            System.out.println("1. Añadir un nuevo cliente");
-            System.out.println("2. Añadir una nueva mascota para un cliente existente");
-            System.out.println("3. Mostrar todos los dueños");
-            System.out.println("4. Mostrar todas las mascotas");
-            System.out.println("5. Salir");
+            mostrarMenu();
             try {
                 numero = Integer.parseInt(teclado.readLine());
             } catch (IOException e) {
@@ -59,24 +50,9 @@ public class Otro {
             //Otros métodos quizás?
             switch (numero) {
                 case 1:
-                    //CLIENTE NUEVO
-                    System.out.println("INTRODUCIMOS EL CLIENTE");
-                    System.out.println("Introduce el nombre");
-                    String nombre = teclado.readLine();
-                    System.out.println("Introduce los apellidos");
-                    String apellidos = teclado.readLine();
-                    System.out.println("Introduce el DNI");
-                    String dni = teclado.readLine();
-                    System.out.println("Introduce la edad");
-                    int edad = 0;
-                    try {
-                        edad = Integer.parseInt(teclado.readLine());
-                    } catch (Exception e) {
-                        System.err.println("Has causado una excepción porque no has entrado un número entero, gracias");
-                        return;
-                    }
-                    Persona p1 = new Persona(nombre, apellidos, dni, edad);
-                    clientes.add(p1);
+            if (clienteNuevo(teclado, clientes)) {
+                return;
+            }
                     break;
 
                 case 2:
@@ -98,51 +74,9 @@ public class Otro {
                         return;
                     }
 
-                    //MASCOTA NUEVA
-                    System.out.println("AHORA INTRODUCIMOS LA MASCOTA");
-                    System.out.println("Introduce el nombre");
-                    nombre = teclado.readLine();
-                    System.out.println("Introduce la raza");
-                    String raza = teclado.readLine();
-                    System.out.println("Introduce la edad");
-                    edad = 0;
-                    try {
-                        edad = Integer.parseInt(teclado.readLine());
-                    } catch (Exception e) {
-                        System.err.println("Has causado una excepción porque no has entrado un número entero, gracias");
-                        return;
-                    }
-
-                    int indiceM = 0;
-                    System.out.println("Introduce el tipo de mascota");
-                    System.out.println("1. Cerdo");
-                    try {
-                        indiceM = Integer.parseInt(teclado.readLine());
-                    } catch (IOException e) {
-                        System.err.println("Vaya, un error de entrada/salida... qué raro");
-                    } catch (NumberFormatException e) {
-                        System.err.println("Has causado una excepción porque no has entrado un número entero, gracias");
-                        return;
-                    }
-
-                    Mascota m1;
-                    switch (indiceM) {
-                        case 1:
-                            float peso = 0.0f;
-                            System.out.println("Introduce el peso del cerdo o la cerda");
-                            try {
-                                peso = Float.parseFloat(teclado.readLine());
-                            } catch (Exception e) {
-                                System.err.println("Has causado una excepción porque no has entrado un número entero, gracias");
-                                return;
-                            }
-                            m1 = new Cerdo(nombre, edad, raza, p2, peso);
-                            break;
-                        default:
-                            m1 = new Mascota(nombre, edad, raza, p2);
-                            break;
-                    }
-                    listaMascotas.add(m1);
+            if (nuevaMascota(teclado, p2, listaMascotas)) {
+                return;
+            }
                     break;
 
                 case 3:
@@ -162,4 +96,104 @@ public class Otro {
 
     }
 
+     /**
+     * Método para crear una mascota nueva
+     *
+     * @param teclado
+     * @param p2 objeto de persona
+     *@param listaMascotas lista de macotas
+     * 
+     */
+    public static boolean nuevaMascota(BufferedReader teclado, Persona p2, ArrayList<Mascota> listaMascotas) throws IOException {
+        //MASCOTA NUEVA
+        String nombre;
+        int edad;
+        
+        System.out.println("AHORA INTRODUCIMOS LA MASCOTA");
+        System.out.println("Introduce el nombre");
+        nombre = teclado.readLine();
+        System.out.println("Introduce la raza");
+        String raza = teclado.readLine();
+        System.out.println("Introduce la edad");
+        edad = 0;
+        try {
+            edad = Integer.parseInt(teclado.readLine());
+        } catch (Exception e) {
+            System.err.println("Has causado una excepción porque no has entrado un número entero, gracias");
+            return true;
+        }
+        int indiceM = 0;
+        System.out.println("Introduce el tipo de mascota");
+        System.out.println("1. Cerdo");
+        try {
+            indiceM = Integer.parseInt(teclado.readLine());
+        }catch (IOException e) {
+            System.err.println("Vaya, un error de entrada/salida... qué raro");
+        } catch (NumberFormatException e) {
+            System.err.println("Has causado una excepción porque no has entrado un número entero, gracias");
+            return true;
+        }
+        Mascota m1;
+        switch (indiceM) {
+            case 1:
+                float peso = 0.0f;
+                System.out.println("Introduce el peso del cerdo o la cerda");
+                try {
+                    peso = Float.parseFloat(teclado.readLine());
+                } catch (Exception e) {
+                    System.err.println("Has causado una excepción porque no has entrado un número entero, gracias");
+                    return true;
+                }
+                m1 = new Cerdo(nombre, edad, raza, p2, peso);
+                break;
+            default:
+                m1 = new Mascota(nombre, edad, raza, p2);
+                break;
+        }
+        listaMascotas.add(m1);
+        return false;
+    }
+
+     /**
+     * Método para crear una mascota nueva
+     *
+     * @param teclado
+     *@param clientes lista de clientes
+     * 
+     */
+    public static boolean clienteNuevo(BufferedReader teclado, ArrayList<Persona> clientes) throws IOException {
+        //CLIENTE NUEVO
+        System.out.println("INTRODUCIMOS EL CLIENTE");
+        System.out.println("Introduce el nombre");
+        String nombre = teclado.readLine();
+        System.out.println("Introduce los apellidos");
+        String apellidos = teclado.readLine();
+        System.out.println("Introduce el DNI");
+        String dni = teclado.readLine();
+        System.out.println("Introduce la edad");
+        int edad = 0;
+        try {
+            edad = Integer.parseInt(teclado.readLine());
+        } catch (Exception e) {
+            System.err.println("Has causado una excepción porque no has entrado un número entero, gracias");
+            return true;
+        }
+        Persona p1 = new Persona(nombre, apellidos, dni, edad);
+        clientes.add(p1);
+        return false;
+    }
+
+     /**
+     * Método que muestra el menú
+     *
+     * 
+     */
+    public static void mostrarMenu() {
+        System.out.println("¿Qué quieres hacer?");
+        System.out.println("1. Añadir un nuevo cliente");
+        System.out.println("2. Añadir una nueva mascota para un cliente existente");
+        System.out.println("3. Mostrar todos los dueños");
+        System.out.println("4. Mostrar todas las mascotas");
+        System.out.println("5. Salir");
+    }
 }
